@@ -1,10 +1,18 @@
 const OpenAI = require('openai');
 
-// Configure client for Groq
-const client = new OpenAI({
-    apiKey: process.env.GROQ_API_KEY,
-    baseURL: 'https://api.groq.com/openai/v1'
-});
+let client;
+const getClient = () => {
+    if (client) return client;
+    if (!process.env.GROQ_API_KEY) {
+        console.error('❌ GROQ_API_KEY is missing');
+        return null;
+    }
+    client = new OpenAI({
+        apiKey: process.env.GROQ_API_KEY,
+        baseURL: 'https://api.groq.com/openai/v1'
+    });
+    return client;
+};
 
 const SYSTEM_PROMPT = `You are CookSmrt AI, an expert culinary assistant. You help users with:
 - Cooking suggestions and tips
@@ -24,7 +32,10 @@ const chatWithAI = async (req, res) => {
     }
 
     try {
-        const completion = await client.chat.completions.create({
+        const aiClient = getClient();
+        if (!aiClient) return res.status(503).json({ message: 'AI service not configured' });
+
+        const completion = await aiClient.chat.completions.create({
             model: 'llama-3.3-70b-versatile',
             messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
             max_tokens: 1024,
