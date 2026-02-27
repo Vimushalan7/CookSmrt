@@ -5,26 +5,35 @@ import { useAuth } from './AuthContext';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-    const { user } = useAuth();
-    const [cart, setCart] = useState({ items: [] });
+    const [cart, setCart] = useState(() => {
+        const saved = localStorage.getItem('cooksmrt_cart');
+        return saved ? JSON.parse(saved) : { items: [] };
+    });
 
-    const fetchCart = async () => {
-        if (!user) return;
-        try { const { data } = await api.get('/users/cart'); setCart(data); } catch { }
+    useEffect(() => {
+        localStorage.setItem('cooksmrt_cart', JSON.stringify(cart));
+    }, [cart]);
+
+    const addToCart = (dish) => {
+        setCart(prev => {
+            const items = [...prev.items];
+            const existing = items.find(i => i._id === dish._id);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                items.push({ ...dish, quantity: 1 });
+            }
+            return { items };
+        });
     };
 
-    useEffect(() => { fetchCart(); }, [user]);
-
-    const addToCart = async (dishId) => {
-        if (!user) return;
-        const { data } = await api.post('/users/cart', { dishId });
-        setCart(data);
+    const removeFromCart = (dishId) => {
+        setCart(prev => ({
+            items: prev.items.filter(i => i._id !== dishId)
+        }));
     };
 
-    const removeFromCart = async (dishId) => {
-        const { data } = await api.delete(`/users/cart/${dishId}`);
-        setCart(data);
-    };
+    const fetchCart = () => { };
 
     return (
         <CartContext.Provider value={{ cart, addToCart, removeFromCart, fetchCart }}>

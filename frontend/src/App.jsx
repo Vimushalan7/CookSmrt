@@ -96,16 +96,14 @@ export default function App() {
               <WishlistProvider>
                 <Toaster position="top-right" />
                 <Routes>
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/signup" element={<SignupPage />} />
-                  <Route path="/" element={<Protected><HomePage /></Protected>} />
-                  <Route path="/dish/:id" element={<Protected><DishDetailPage /></Protected>} />
-                  <Route path="/cart" element={<Protected><CartPage /></Protected>} />
-                  <Route path="/wishlist" element={<Protected><WishlistPage /></Protected>} />
-                  <Route path="/orders" element={<Protected><OrderHistoryPage /></Protected>} />
-                  <Route path="/profile" element={<Protected><ProfilePage /></Protected>} />
-                  <Route path="/settings" element={<Protected><SettingsPage /></Protected>} />
-                  <Route path="/admin" element={<Protected><AdminPage /></Protected>} />
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/dish/:id" element={<DishDetailPage />} />
+                  <Route path="/cart" element={<CartPage />} />
+                  <Route path="/wishlist" element={<WishlistPage />} />
+                  <Route path="/orders" element={<OrderHistoryPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
+                  <Route path="/admin" element={<AdminPage />} />
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
               </WishlistProvider>

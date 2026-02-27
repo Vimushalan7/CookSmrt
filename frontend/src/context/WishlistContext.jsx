@@ -5,41 +5,33 @@ import { useAuth } from './AuthContext';
 const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
-    const { user } = useAuth();
-    const [wishlist, setWishlist] = useState({ dishes: [] });
+    const [wishlist, setWishlist] = useState(() => {
+        const saved = localStorage.getItem('cooksmrt_wishlist');
+        return saved ? JSON.parse(saved) : { dishes: [] };
+    });
 
-    const fetchWishlist = async () => {
-        if (!user) return;
-        try { const { data } = await api.get('/users/wishlist'); setWishlist(data); } catch { }
-    };
+    useEffect(() => {
+        localStorage.setItem('cooksmrt_wishlist', JSON.stringify(wishlist));
+    }, [wishlist]);
 
-    useEffect(() => { fetchWishlist(); }, [user]);
-
-    const toggle = async (dishId) => {
-        if (!user) return;
-        try {
-            console.log('Toggling wishlist for:', dishId);
-            const { data } = await api.post('/users/wishlist', { dishId });
-            console.log('Wishlist update received:', data);
-            if (data) setWishlist(data);
-        } catch (err) {
-            console.error('Wishlist toggle error:', err);
-        }
+    const toggle = (dish) => {
+        setWishlist(prev => {
+            const dishes = [...prev.dishes];
+            const index = dishes.findIndex(d => d._id === dish._id);
+            if (index > -1) {
+                dishes.splice(index, 1);
+            } else {
+                dishes.push(dish);
+            }
+            return { dishes };
+        });
     };
 
     const isWished = (dishId) => {
-        if (!wishlist || !wishlist.dishes || !dishId) return false;
-        try {
-            return wishlist.dishes.some((d) => {
-                if (!d) return false;
-                const id = d._id || d;
-                return id && id.toString() === dishId.toString();
-            });
-        } catch (err) {
-            console.error('isWished comparison crash:', err);
-            return false;
-        }
+        return wishlist.dishes.some(d => d._id === dishId);
     };
+
+    const fetchWishlist = () => { };
 
     return (
         <WishlistContext.Provider value={{ wishlist, toggle, isWished, fetchWishlist }}>

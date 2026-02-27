@@ -4,32 +4,19 @@ import api from '../api/api';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    // Default guest identity for public access
+    const [user, setUser] = useState({ name: 'Guest User', role: 'user', avatar: null });
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const stored = localStorage.getItem('cooksmrt_user');
-        if (stored) setUser(JSON.parse(stored));
-        setLoading(false);
-    }, []);
-
-    const login = (userData) => {
-        localStorage.setItem('cooksmrt_token', userData.token);
-        localStorage.setItem('cooksmrt_user', JSON.stringify(userData));
-        setUser(userData);
-    };
-
-    const logout = () => {
+        // Just clear any old tokens to be clean
         localStorage.removeItem('cooksmrt_token');
         localStorage.removeItem('cooksmrt_user');
-        setUser(null);
-    };
+    }, []);
 
-    const updateUser = (data) => {
-        const updated = { ...user, ...data };
-        localStorage.setItem('cooksmrt_user', JSON.stringify(updated));
-        setUser(updated);
-    };
+    const login = () => { };
+    const logout = () => { };
+    const updateUser = (data) => setUser(prev => ({ ...prev, ...data }));
 
     return (
         <AuthContext.Provider value={{ user, login, logout, updateUser, loading }}>

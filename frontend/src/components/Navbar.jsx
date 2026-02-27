@@ -7,20 +7,21 @@ import { useCart } from '../context/CartContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
-    const { user, logout } = useAuth();
     const { dark, toggle } = useTheme();
     const { cart } = useCart();
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [notifOpen, setNotifOpen] = useState(false);
 
+    // Guest identity
+    const user = { name: 'Guest User', avatar: null };
+
     const navLinks = [
         { label: 'Home', icon: <Home size={18} />, to: '/' },
-        { label: 'Profile', icon: <User size={18} />, to: '/profile' },
-        { label: 'Order History', icon: <History size={18} />, to: '/orders' },
         { label: 'Wishlist', icon: <Heart size={18} />, to: '/wishlist' },
+        { label: 'Order History', icon: <History size={18} />, to: '/orders' },
+        { label: 'Profile', icon: <User size={18} />, to: '/profile' },
         { label: 'Settings', icon: <Settings size={18} />, to: '/settings' },
-        ...(user?.role === 'admin' ? [{ label: 'Admin Panel', icon: <ChefHat size={18} />, to: '/admin' }] : []),
     ];
 
     return (
@@ -48,7 +49,7 @@ export default function Navbar() {
                     <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                         className="fixed top-16 right-4 z-50 card p-4 w-72 shadow-xl">
                         <h3 className="font-semibold mb-3">Notifications</h3>
-                        <div className="text-sm text-gray-500 text-center py-4">🎉 Welcome to CookSmrt! Explore 100+ dishes.</div>
+                        <div className="text-sm text-gray-500 text-center py-4">🎉 Welcome to CookSmrt! Explore amazing dishes.</div>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -65,11 +66,11 @@ export default function Navbar() {
                             <div className="flex items-center justify-between p-4 border-b border-gray-100">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-full overflow-hidden bg-orange-100 flex items-center justify-center">
-                                        {user?.avatar ? <img src={user.avatar} alt="avatar" className="w-full h-full object-cover" /> : <User size={20} className="text-orange-500" />}
+                                        <User size={20} className="text-orange-500" />
                                     </div>
                                     <div>
-                                        <p className="font-semibold text-sm">{user?.name}</p>
-                                        <p className="text-xs text-gray-500">{user?.email || user?.phone}</p>
+                                        <p className="font-semibold text-sm">Guest User</p>
+                                        <p className="text-xs text-gray-500">Public Session</p>
                                     </div>
                                 </div>
                                 <button onClick={() => setSidebarOpen(false)} className="p-1"><X size={20} /></button>
@@ -89,10 +90,6 @@ export default function Navbar() {
                                 <button onClick={toggle} className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${dark ? 'hover:bg-gray-800' : 'hover:bg-orange-50'}`}>
                                     {dark ? <Sun size={18} className="text-orange-500" /> : <Moon size={18} className="text-orange-500" />}
                                     {dark ? 'Light Mode' : 'Dark Mode'}
-                                </button>
-                                <button onClick={() => { logout(); navigate('/login'); setSidebarOpen(false); }}
-                                    className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
-                                    <LogOut size={18} /> Logout
                                 </button>
                             </div>
                         </motion.div>

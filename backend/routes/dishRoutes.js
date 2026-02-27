@@ -5,10 +5,10 @@ const { protect, adminOnly } = require('../middleware/authMiddleware');
 
 router.get('/', getDishes);
 router.get('/search', searchDishes);
-router.post('/seed', seedDishes); // Added for remote seeding
+router.post('/seed', seedDishes);
 router.get('/:id', getDishById);
-router.post('/', protect, adminOnly, createDish);
-router.put('/:id', protect, updateDish);
-router.delete('/:id', protect, adminOnly, deleteDish);
+router.post('/', createDish);
+router.put('/:id', updateDish);
+router.delete('/:id', adminOnly, deleteDish);
 
 module.exports = router;

@@ -8,17 +8,17 @@ const {
     getOrders, placeOrder,
 } = require('../controllers/userController');
 
-router.get('/profile', protect, getProfile);
-router.put('/profile', protect, updateProfile);
+router.get('/profile', getProfile);
+router.put('/profile', updateProfile);
 
-router.get('/cart', protect, getCart);
-router.post('/cart', protect, addToCart);
-router.delete('/cart/:dishId', protect, removeFromCart);
+router.get('/cart', getCart);
+router.post('/cart', addToCart);
+router.delete('/cart/:dishId', removeFromCart);
 
-router.get('/wishlist', protect, getWishlist);
-router.post('/wishlist', protect, toggleWishlist);
+router.get('/wishlist', getWishlist);
+router.post('/wishlist', toggleWishlist);
 
-router.get('/orders', protect, getOrders);
-router.post('/orders', protect, placeOrder);
+router.get('/orders', getOrders);
+router.post('/orders', placeOrder);
 
 module.exports = router;
