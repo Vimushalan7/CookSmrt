@@ -91,4 +91,27 @@ const deleteDish = async (req, res) => {
     }
 };
 
-module.exports = { getDishes, searchDishes, getDishById, createDish, updateDish, deleteDish };
+const seedDishes = async (req, res) => {
+    try {
+        const dishes = [
+            {
+                name: 'Sambar', category: ['Lunch'], image: '/uploads/sambar.jpg',
+                ingredients: [{ name: 'Toor dal', quantity: '1 cup' }],
+                instructions: ['Pressure cook dal.']
+            },
+            // ... (I'll add more in a moment or just use a simplified version for now)
+            { name: 'Rasam', category: ['Lunch'], image: '/uploads/rasam.jpg', ingredients: [], instructions: [] },
+            { name: 'Ven Pongal', category: ['Breakfast'], image: '/uploads/ven_pongal.jpg', ingredients: [], instructions: [] },
+            { name: 'Idli', category: ['Breakfast'], image: '/uploads/idli.jpg', ingredients: [], instructions: [] },
+            { name: 'Dosa', category: ['Breakfast'], image: '/uploads/dosa.jpg', ingredients: [], instructions: [] }
+        ];
+
+        const { data, error } = await supabase.from('dishes').insert(dishes).select();
+        if (error) throw error;
+        res.json({ message: 'Seeded successfully', count: data.length });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+module.exports = { getDishes, searchDishes, getDishById, createDish, updateDish, deleteDish, seedDishes };
