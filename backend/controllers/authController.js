@@ -93,22 +93,37 @@ const login = async (req, res) => {
     }
 };
 
-// @POST /api/auth/firebase-login (phone OTP via Firebase)
+// @POST /api/auth/firebase-login (Phone or Google login via Firebase)
 const firebaseLogin = async (req, res) => {
     try {
         const { idToken } = req.body;
         if (!idToken) return res.status(400).json({ message: 'Firebase token required' });
 
         const decodedToken = await admin.auth().verifyIdToken(idToken);
-        const { phone_number: phone } = decodedToken;
-        if (!phone) return res.status(400).json({ message: 'Token did not contain a phone number' });
+        const { phone_number: phone, email, name, picture: avatar } = decodedToken;
 
-        let { data: user } = await supabase.from('users').select('*').eq('phone', phone).maybeSingle();
+        let user;
+
+        // Try to find user by email or phone
+        if (email) {
+            const { data } = await supabase.from('users').select('*').eq('email', email.toLowerCase()).maybeSingle();
+            user = data;
+        } else if (phone) {
+            const { data } = await supabase.from('users').select('*').eq('phone', phone).maybeSingle();
+            user = data;
+        }
 
         if (!user) {
+            // Create new user
             const { data: newUser, error } = await supabase
                 .from('users')
-                .insert({ name: 'New User', phone, role: 'user' })
+                .insert({
+                    name: name || 'CookSmrt User',
+                    email: email?.toLowerCase(),
+                    phone,
+                    avatar: avatar || '',
+                    role: 'user'
+                })
                 .select()
                 .single();
             if (error) throw error;

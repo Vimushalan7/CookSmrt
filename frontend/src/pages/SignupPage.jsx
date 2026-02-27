@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/api';
 import { ChefHat } from 'lucide-react';
+import { auth, googleProvider } from '../firebase';
+import { signInWithPopup } from 'firebase/auth';
 
 export default function SignupPage() {
     const { login } = useAuth();
@@ -18,7 +20,6 @@ export default function SignupPage() {
         if (!form.email && !form.phone) return toast.error('Provide either an email or phone number');
         setLoading(true);
         try {
-            // Only send non-empty fields to avoid sparse unique index conflicts
             const payload = { name: form.name, password: form.password };
             if (form.email) payload.email = form.email;
             if (form.phone) payload.phone = form.phone;
@@ -29,6 +30,21 @@ export default function SignupPage() {
             navigate('/');
         } catch (err) {
             toast.error(err.response?.data?.message || 'Signup failed');
+        } finally { setLoading(false); }
+    };
+
+    const handleGoogleLogin = async () => {
+        setLoading(true);
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const idToken = await result.user.getIdToken();
+            const { data } = await api.post('/auth/firebase-login', { idToken });
+            login(data);
+            toast.success(`Welcome to CookSmrt, ${data.name}! 🍳`);
+            navigate('/');
+        } catch (err) {
+            console.error('Google auth error:', err);
+            toast.error(err.response?.data?.message || 'Google Sign Up failed');
         } finally { setLoading(false); }
     };
 
@@ -46,11 +62,27 @@ export default function SignupPage() {
                     <input className="input" name="email" type="email" placeholder="Email address" value={form.email} onChange={handle} />
                     <input className="input" name="phone" type="tel" placeholder="Phone number (optional)" value={form.phone} onChange={handle} />
                     <input className="input" name="password" type="password" placeholder="Password" value={form.password} onChange={handle} required />
-                    <button type="submit" disabled={loading} className="btn-primary w-full">
+                    <button type="submit" disabled={loading} className="btn-primary w-full shadow-lg shadow-orange-200">
                         {loading ? 'Creating account...' : 'Sign Up'}
                     </button>
                 </form>
-                <p className="text-center text-gray-500 text-sm mt-6">
+
+                <div className="flex items-center my-6">
+                    <div className="flex-1 border-t border-gray-200"></div>
+                    <span className="px-3 text-gray-400 text-xs uppercase tracking-wider">or</span>
+                    <div className="flex-1 border-t border-gray-200"></div>
+                </div>
+
+                <button
+                    onClick={handleGoogleLogin}
+                    disabled={loading}
+                    className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 rounded-xl bg-white hover:bg-gray-50 transition-all font-medium text-gray-700 shadow-sm"
+                >
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
+                    Continue with Google
+                </button>
+
+                <p className="text-center text-gray-500 text-sm mt-8">
                     Already have an account? <Link to="/login" className="text-orange-500 font-semibold hover:underline">Login</Link>
                 </p>
             </motion.div>

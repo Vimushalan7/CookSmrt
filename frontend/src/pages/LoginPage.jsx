@@ -6,6 +6,8 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import api from '../api/api';
 import { Sun, Moon } from 'lucide-react';
+import { auth, googleProvider } from '../firebase';
+import { signInWithPopup } from 'firebase/auth';
 
 export default function LoginPage() {
     const { login } = useAuth();
@@ -31,6 +33,21 @@ export default function LoginPage() {
             if (msg === 'Invalid credentials') {
                 toast("No account? Click Sign Up below to create one!", { icon: '👇', duration: 5000 });
             }
+        } finally { setLoading(false); }
+    };
+
+    const handleGoogleLogin = async () => {
+        setLoading(true);
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const idToken = await result.user.getIdToken();
+            const { data } = await api.post('/auth/firebase-login', { idToken });
+            login(data);
+            toast.success(`Welcome back, ${data.name}! 🍳`);
+            navigate('/');
+        } catch (err) {
+            console.error('Google auth error:', err);
+            toast.error(err.response?.data?.message || 'Google Login failed');
         } finally { setLoading(false); }
     };
 
@@ -69,12 +86,27 @@ export default function LoginPage() {
                         onChange={handle}
                         required
                     />
-                    <button type="submit" disabled={loading} className="btn-primary w-full">
+                    <button type="submit" disabled={loading} className="btn-primary w-full shadow-lg shadow-orange-200">
                         {loading ? 'Logging in...' : 'Login'}
                     </button>
                 </form>
 
-                <p className="text-center text-gray-500 text-sm mt-6">
+                <div className="flex items-center my-6">
+                    <div className="flex-1 border-t border-gray-200 dark:border-gray-700"></div>
+                    <span className="px-3 text-gray-400 text-xs uppercase tracking-wider">or</span>
+                    <div className="flex-1 border-t border-gray-200 dark:border-gray-700"></div>
+                </div>
+
+                <button
+                    onClick={handleGoogleLogin}
+                    disabled={loading}
+                    className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all font-medium text-gray-700 dark:text-gray-200 shadow-sm"
+                >
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
+                    Continue with Google
+                </button>
+
+                <p className="text-center text-gray-500 text-sm mt-8">
                     Don't have an account? <Link to="/signup" className="text-orange-500 font-semibold hover:underline">Sign Up</Link>
                 </p>
             </motion.div>
