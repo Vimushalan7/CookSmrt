@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Chatbot from '../components/Chatbot';
+import Footer from '../components/Footer';
 import api from '../api/api';
 
 export default function OrderHistoryPage() {
@@ -41,6 +42,7 @@ export default function OrderHistoryPage() {
                     )}
             </div>
             <Chatbot />
+            <Footer />
         </div>
     );
 }

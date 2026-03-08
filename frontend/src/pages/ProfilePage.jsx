@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Camera, Save } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Chatbot from '../components/Chatbot';
+import Footer from '../components/Footer';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/api';
 import toast from 'react-hot-toast';
@@ -57,6 +58,7 @@ export default function ProfilePage() {
                 </div>
             </div>
             <Chatbot />
+            <Footer />
         </div>
     );
 }

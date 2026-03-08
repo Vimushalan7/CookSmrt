@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Chatbot from '../components/Chatbot';
+import Footer from '../components/Footer';
 import { useWishlist } from '../context/WishlistContext';
 
 export default function WishlistPage() {
@@ -33,7 +34,7 @@ export default function WishlistPage() {
                                     <div className="p-3">
                                         <h3 className="font-bold text-sm mb-2 truncate">{dish.name}</h3>
                                         <button
-                                            onClick={() => toggle(dish.id)}
+                                            onClick={() => toggle(dish)}
                                             className="w-full py-2 flex items-center justify-center gap-1 text-red-500 text-xs font-semibold border-t border-gray-100 hover:bg-red-50 transition-colors"
                                         >
                                             <Heart size={14} fill="#ef4444" /> Remove
@@ -46,6 +47,7 @@ export default function WishlistPage() {
                 )}
             </div>
             <Chatbot />
+            <Footer />
         </div>
     );
 }

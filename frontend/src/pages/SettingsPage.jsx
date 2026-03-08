@@ -3,6 +3,8 @@ import { useTheme } from '../context/ThemeContext';
 import Navbar from '../components/Navbar';
 import { Sun, Moon, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Chatbot from '../components/Chatbot';
+import Footer from '../components/Footer';
 
 export default function SettingsPage() {
     const { dark, toggle } = useTheme();
@@ -47,6 +49,8 @@ export default function SettingsPage() {
                     </div>
                 </div>
             </div>
+            <Chatbot />
+            <Footer />
         </div>
     );
 }

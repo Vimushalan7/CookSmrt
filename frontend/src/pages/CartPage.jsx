@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Trash2, ShoppingBag } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Chatbot from '../components/Chatbot';
+import Footer from '../components/Footer';
 import { useCart } from '../context/CartContext';
 import api from '../api/api';
 import toast from 'react-hot-toast';
@@ -54,6 +55,7 @@ export default function CartPage() {
                 )}
             </div>
             <Chatbot />
+            <Footer />
         </div>
     );
 }
