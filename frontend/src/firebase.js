@@ -10,6 +10,19 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
+let auth = null;
+let googleProvider = null;
+
+if (firebaseConfig.apiKey && firebaseConfig.apiKey !== 'undefined') {
+    try {
+        const app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        googleProvider = new GoogleAuthProvider();
+    } catch (error) {
+        console.warn("Firebase initialization failed:", error);
+    }
+} else {
+    console.log("Firebase API key missing. Firebase features will be disabled.");
+}
+
+export { auth, googleProvider };

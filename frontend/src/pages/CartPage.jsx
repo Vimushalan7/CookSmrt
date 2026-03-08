@@ -35,13 +35,13 @@ export default function CartPage() {
                     <>
                         <div className="space-y-3 mb-6">
                             {cart.items.map((item) => (
-                                <div key={item._id} className="card p-4 flex items-center gap-4">
+                                <div key={item.id} className="card p-4 flex items-center gap-4">
                                     <img src={item.dish?.image} alt={item.dish?.name} className="w-16 h-16 rounded-xl object-cover" />
                                     <div className="flex-1">
-                                        <p className="font-semibold">{item.dish?.name}</p>
-                                        <p className="text-sm text-gray-400">Qty: {item.quantity}</p>
+                                        <h3 className="font-bold">{item.dish?.name}</h3>
+                                        <p className="text-sm text-gray-500">₹{item.dish?.price || 150}</p>
                                     </div>
-                                    <button onClick={() => { removeFromCart(item.dish?._id); toast.success('Removed from cart'); }} className="text-red-400 hover:text-red-600">
+                                    <button onClick={() => { removeFromCart(item.dish?.id); toast.success('Removed from cart'); }} className="text-red-400 hover:text-red-600">
                                         <Trash2 size={18} />
                                     </button>
                                 </div>

@@ -17,7 +17,7 @@ export const WishlistProvider = ({ children }) => {
     const toggle = (dish) => {
         setWishlist(prev => {
             const dishes = [...prev.dishes];
-            const index = dishes.findIndex(d => d._id === dish._id);
+            const index = dishes.findIndex(d => d.id === dish.id);
             if (index > -1) {
                 dishes.splice(index, 1);
             } else {
@@ -28,7 +28,7 @@ export const WishlistProvider = ({ children }) => {
     };
 
     const isWished = (dishId) => {
-        return wishlist.dishes.some(d => d._id === dishId);
+        return wishlist.dishes.some(d => d.id === dishId);
     };
 
     const fetchWishlist = () => { };

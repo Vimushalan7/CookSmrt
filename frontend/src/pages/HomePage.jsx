@@ -46,9 +46,9 @@ export default function HomePage() {
                         <p className="text-sm text-gray-400 dark:text-gray-500 mb-4">{dishes.length} dishes found</p>
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                             {dishes.map((dish, i) => {
-                                if (!dish?._id) return null;
+                                if (!dish?.id) return null;
                                 return (
-                                    <motion.div key={dish._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
+                                    <motion.div key={dish.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
                                         <DishCard dish={dish} />
                                     </motion.div>
                                 );

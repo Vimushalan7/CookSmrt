@@ -11,22 +11,22 @@ export default function DishCard({ dish }) {
     const { addToCart } = useCart();
     const { user } = useAuth();
 
-    if (!dish?._id) return null;
+    if (!dish?.id) return null;
 
-    const wished = isWished(dish._id);
+    const wished = isWished(dish.id);
     console.log(`DishCard [${dish.name}]: wished = ${wished}`);
 
     const handleWishlist = (e) => {
         e.preventDefault();
         if (!user) return toast.error('Please login first');
-        toggle(dish._id);
+        toggle(dish);
         toast.success(wished ? 'Removed from wishlist' : '❤️ Added to wishlist');
     };
 
     const handleCart = (e) => {
         e.preventDefault();
         if (!user) return toast.error('Please login first');
-        addToCart(dish._id);
+        addToCart(dish);
         toast.success('🛒 Added to cart!');
     };
 
@@ -37,7 +37,7 @@ export default function DishCard({ dish }) {
 
     return (
         <motion.div whileHover={{ y: -4 }} className="card overflow-hidden group cursor-pointer">
-            <Link to={`/dish/${dish._id}`}>
+            <Link to={`/dish/${dish.id}`}>
                 <div className="relative overflow-hidden h-44 bg-gradient-to-br from-orange-100 to-red-50">
                     <img
                         src={dish.image}

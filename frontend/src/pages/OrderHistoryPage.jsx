@@ -24,7 +24,7 @@ export default function OrderHistoryPage() {
                     ) : (
                         <div className="space-y-4">
                             {orders.map((order) => (
-                                <div key={order._id} className="card p-4">
+                                <div key={order.id} className="card p-4">
                                     <div className="flex justify-between items-center mb-3">
                                         <span className="text-xs text-gray-400">{new Date(order.createdAt).toLocaleDateString()}</span>
                                         <span className={`text-xs px-2 py-0.5 rounded-full font-semibold capitalize ${statusColor[order.status]}`}>{order.status}</span>

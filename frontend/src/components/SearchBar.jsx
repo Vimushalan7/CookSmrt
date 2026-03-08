@@ -48,7 +48,7 @@ export default function SearchBar() {
                     <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 5 }}
                         className="absolute top-full left-0 right-0 mt-2 card shadow-xl z-40 overflow-hidden">
                         {suggestions.map((dish) => (
-                            <button key={dish._id} onClick={() => { navigate(`/dish/${dish._id}`); setQuery(''); setOpen(false); }}
+                            <button key={dish.id} onClick={() => { navigate(`/dish/${dish.id}`); setQuery(''); setOpen(false); }}
                                 className="flex items-center gap-3 w-full px-4 py-3 text-left hover:bg-orange-50 transition-colors border-b border-gray-50 last:border-0">
                                 <img src={dish.image} alt={dish.name} className="w-10 h-10 rounded-lg object-cover" />
                                 <div>

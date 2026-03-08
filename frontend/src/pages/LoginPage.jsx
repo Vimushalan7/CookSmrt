@@ -99,11 +99,11 @@ export default function LoginPage() {
 
                 <button
                     onClick={handleGoogleLogin}
-                    disabled={loading}
-                    className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all font-medium text-gray-700 dark:text-gray-200 shadow-sm"
+                    disabled={loading || !auth}
+                    className={`w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all font-medium text-gray-700 dark:text-gray-200 shadow-sm ${!auth ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5" />
-                    Continue with Google
+                    {auth ? 'Continue with Google' : 'Google Auth Disabled'}
                 </button>
 
                 <p className="text-center text-gray-500 text-sm mt-8">
