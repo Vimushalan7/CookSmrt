@@ -3,6 +3,7 @@ import { Plus, Trash2, Edit3, X, Save } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import api from '../api/api';
 import toast from 'react-hot-toast';
+import Footer from '../components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const CATEGORIES = ['Breakfast', 'Lunch', 'Dinner'];
@@ -122,6 +123,7 @@ export default function AdminPage() {
                     )}
                 </AnimatePresence>
             </div>
+            <Footer />
         </div>
     );
 }

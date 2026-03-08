@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import Chatbot from '../components/Chatbot';
 import api from '../api/api';
 import LoadingScreen from '../components/LoadingScreen';
+import Footer from '../components/Footer';
 import { AnimatePresence } from 'framer-motion';
 
 export default function DishDetailPage() {
@@ -231,6 +232,7 @@ export default function DishDetailPage() {
                 )}
             </div>
             <Chatbot />
+            <Footer />
         </div>
     );
 }

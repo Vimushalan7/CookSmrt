@@ -5,6 +5,7 @@ import SearchBar from '../components/SearchBar';
 import CategoryTabs from '../components/CategoryTabs';
 import DishCard from '../components/DishCard';
 import Chatbot from '../components/Chatbot';
+import Footer from '../components/Footer';
 import api from '../api/api';
 
 export default function HomePage() {
@@ -64,6 +65,7 @@ export default function HomePage() {
                 )}
             </div>
             <Chatbot />
+            <Footer />
         </div>
     );
 }
